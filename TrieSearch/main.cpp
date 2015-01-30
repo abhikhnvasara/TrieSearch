@@ -61,7 +61,7 @@ public:
         for(std::string::const_iterator itr = word.begin(); itr != word.end(); ++itr)
         {
             const char c = *itr;
-            me           = parent->child();
+            me = parent->child();
             
             while(!found && me)
             {
@@ -76,13 +76,9 @@ public:
                     me=me->next();
             }
             
-            if (found)
+            if (!found)
             {
-                parent = me;
                 found  = false;
-            }
-            else
-            {
                 me = new TrieNode(c,0);
                 
                 if (!parent->child())
@@ -90,14 +86,29 @@ public:
                 else
                     if (my_sibling)
                         my_sibling->AddNext(me);
-                
-                parent = me;
             }
+            parent = me;
         }
-        
         return false;
     }
     
+    bool searchString(std::string word)
+    {
+        TrieNode *parent = _root;
+        
+        for(std::string::const_iterator itr = word.begin(); itr != word.end(); ++itr)
+        {
+            const char c = *itr;
+            TrieNode *me = parent->child();
+            
+            while(me && me->val() != c) me=me->next();
+            
+            if (!me) return false;
+            
+            parent = me;
+        }
+        return true;
+    }
     
 private:
     TrieNode *_root;

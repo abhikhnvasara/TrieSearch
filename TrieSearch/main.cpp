@@ -53,23 +53,45 @@ public:
     
     bool insertString(std::string word)
     {
-        TrieNode *prev_itr = _root;
-        TrieNode *node_itr = _root->child();
-
+        TrieNode *parent = _root;
+        TrieNode *me = NULL;
+        TrieNode *my_sibling = NULL;
+        bool found = false;
+        
         for(std::string::const_iterator itr = word.begin(); itr != word.end(); ++itr)
         {
             const char c = *itr;
-            while(node_itr)
+            me           = parent->child();
+            
+            while(!found && me)
             {
-                if(node_itr->val() == c)
+                if(me->val() == c)
+                {
+                    found=true;
                     break;
-                prev_itr = node_itr;
-                node_itr = node_itr->next();
+                }
+                
+                my_sibling = me;
+                if(me)
+                    me=me->next();
             }
-            if(!node_itr)
+            
+            if (found)
             {
-                prev_itr->AddChild(new TrieNode(c,0));
-                node_itr = prev_itr->child();
+                parent = me;
+                found  = false;
+            }
+            else
+            {
+                me = new TrieNode(c,0);
+                
+                if (!parent->child())
+                    parent->AddChild(me);
+                else
+                    if (my_sibling)
+                        my_sibling->AddNext(me);
+                
+                parent = me;
             }
         }
         

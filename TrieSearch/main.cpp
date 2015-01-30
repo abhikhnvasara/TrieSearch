@@ -56,30 +56,24 @@ public:
         TrieNode *parent = _root;
         TrieNode *me = NULL;
         TrieNode *my_sibling = NULL;
-        bool found = false;
         
         for(std::string::const_iterator itr = word.begin(); itr != word.end(); ++itr)
         {
             const char c = *itr;
             me = parent->child();
             
-            while(!found && me)
+            while(me)
             {
-                if(me->val() == c)
-                {
-                    found=true;
-                    break;
-                }
-                
+                if(me->val() == c) break;
                 my_sibling = me;
-                if(me)
-                    me=me->next();
+                me=me->next();
             }
             
-            if (!found)
+            if (!me)
             {
-                found  = false;
                 me = new TrieNode(c,0);
+                
+                if(!me) return false;
                 
                 if (!parent->child())
                     parent->AddChild(me);
@@ -87,9 +81,11 @@ public:
                     if (my_sibling)
                         my_sibling->AddNext(me);
             }
+            
             parent = me;
         }
-        return false;
+        
+        return true;
     }
     
     bool searchString(std::string word)

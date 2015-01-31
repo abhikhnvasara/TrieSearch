@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+using namespace std;
+
 class TrieNode
 {
 public:
@@ -64,7 +66,7 @@ public:
             
             while(me)
             {
-                if(me->val() == c) break;
+                if(me->key() == c) break;
                 my_sibling = me;
                 me=me->next();
             }
@@ -97,12 +99,13 @@ public:
             const char c = *itr;
             TrieNode *me = parent->child();
             
-            while(me && me->val() != c) me=me->next();
+            while(me && me->key() != c) me=me->next();
             
             if (!me) return false;
             
             parent = me;
         }
+        
         return true;
     }
     
@@ -111,7 +114,36 @@ private:
 };
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    
+    Trie trie_dictionary;
+    
+    string myString1("apple");
+    string myString2("orange");
+    string myString3("pineaplle");
+    string myString4("apricot");
+    string myString5("plum");
+    
+    trie_dictionary.insertString(myString1);
+    trie_dictionary.insertString(myString2);
+    trie_dictionary.insertString(myString3);
+    trie_dictionary.insertString(myString4);
+
+    bool found = false;
+    
+    found = trie_dictionary.searchString(myString1);
+    cout << myString1 << " found => " << found << endl;
+    
+    found = trie_dictionary.searchString(myString2);
+    cout << myString2 << " found => " << found << endl;
+    
+    found = trie_dictionary.searchString(myString3);
+    cout << myString3 << " found => " << found << endl;
+    
+    found = trie_dictionary.searchString(myString4);
+    cout << myString4 << " found => " << found << endl;
+
+    found = trie_dictionary.searchString(myString5);
+    cout << myString5 << " found => " << found << endl;
+    
     return 0;
 }
